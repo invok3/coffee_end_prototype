@@ -1,6 +1,5 @@
 /* ---- State ---- */
 var state = {
-  currentScreen: 'screen-welcome',
   product: null,
   size: 'small',
   quantity: 1,
@@ -29,7 +28,6 @@ function navigateTo(screenId) {
     all[i].classList.remove('active');
   }
   document.getElementById(screenId).classList.add('active');
-  state.currentScreen = screenId;
 
   if (screenId === 'screen-confirm') {
     renderConfirmation();
@@ -145,7 +143,6 @@ function placeOrder() {
 /* ---- Reset ---- */
 function resetOrder() {
   state = {
-    currentScreen: 'screen-welcome',
     product: null,
     size: 'small',
     quantity: 1,
