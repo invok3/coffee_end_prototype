@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>كويك ستوب كوفي</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div id="app">
+
+    <!-- SCREEN 1: Welcome -->
+    <div id="screen-welcome" class="screen active">
+      <div class="screen-content welcome">
+        <div class="welcome-logo">
+          <span class="logo-icon">&#9749;</span>
+          <h1>كويك ستوب</h1>
+          <p class="tagline">اطلب مسبقاً. استلم. انطلق.</p>
+        </div>
+        <button class="btn btn-primary btn-lg" onclick="navigateTo('screen-menu')">
+          ابدأ الطلب
+        </button>
+      </div>
+    </div>
+
+    <!-- SCREEN 2: Menu -->
+    <div id="screen-menu" class="screen">
+      <div class="screen-content">
+        <h2 class="screen-title">اختر مشروبك</h2>
+        <div class="menu-grid">
+          <button class="menu-card" onclick="selectProduct('coffee')">
+            <span class="menu-icon">&#9749;</span>
+            <span class="menu-name">قهوة</span>
+            <span class="menu-price">$3.00</span>
+          </button>
+          <button class="menu-card" onclick="selectProduct('milkshake')">
+            <span class="menu-icon">&#127847;</span>
+            <span class="menu-name">ميلك شيك</span>
+            <span class="menu-price">$5.00</span>
+          </button>
+          <button class="menu-card" onclick="selectProduct('juice')">
+            <span class="menu-icon">&#129383;</span>
+            <span class="menu-name">عصير</span>
+            <span class="menu-price">$4.00</span>
+          </button>
+          <button class="menu-card" onclick="selectProduct('slush')">
+            <span class="menu-icon">&#127846;</span>
+            <span class="menu-name">كوكتيل سلاش</span>
+            <span class="menu-price">$5.00</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCREEN 3: Product Detail -->
+    <div id="screen-detail" class="screen">
+      <div class="screen-content">
+        <button class="btn-back" onclick="navigateTo('screen-menu')">&#8594; رجوع</button>
+        <div class="detail-hero">
+          <span id="detail-icon" class="detail-icon">&#9749;</span>
+          <h2 id="detail-name">قهوة</h2>
+          <span id="detail-price" class="detail-price">$3.00</span>
+        </div>
+        <div class="detail-section">
+          <h3>الحجم</h3>
+          <div class="size-selector">
+            <button class="size-btn active" data-size="small" onclick="selectSize('small')">
+              <span class="size-label">ص</span>
+              <span class="size-name">صغير</span>
+            </button>
+            <button class="size-btn" data-size="medium" onclick="selectSize('medium')">
+              <span class="size-label">م</span>
+              <span class="size-name">متوسط</span>
+            </button>
+            <button class="size-btn" data-size="large" onclick="selectSize('large')">
+              <span class="size-label">ك</span>
+              <span class="size-name">كبير</span>
+            </button>
+          </div>
+        </div>
+        <div class="detail-section">
+          <h3>الكمية</h3>
+          <div class="qty-selector">
+            <button class="qty-btn" onclick="changeQty(-1)">&#8722;</button>
+            <span id="qty-value" class="qty-value">1</span>
+            <button class="qty-btn" onclick="changeQty(1)">+</button>
+          </div>
+        </div>
+        <div class="detail-section detail-total">
+          <span>الإجمالي</span>
+          <span id="detail-total-price" class="total-price">$3.00</span>
+        </div>
+        <button class="btn btn-primary" onclick="navigateTo('screen-map')">
+          &#8594; اختر جانب الاستلام
+        </button>
+      </div>
+    </div>
+
+    <!-- SCREEN 4: Pickup Map -->
+    <div id="screen-map" class="screen">
+      <div class="screen-content">
+        <button class="btn-back" onclick="navigateTo('screen-detail')">&#8594; رجوع</button>
+        <h2 class="screen-title">من أي جانب تقترب؟</h2>
+
+        <div class="map-street">
+          <div class="map-lane" id="side-outgoing" data-side="outgoing"
+               onclick="handleMapTap('outgoing')">
+            <img src="right_lane.svg" alt="Outgoing lane" class="map-img"/>
+            <span class="map-label map-label-outgoing">الجهة الصادرة</span>
+          </div>
+          <div class="map-lane" id="side-incoming" data-side="incoming"
+               onclick="handleMapTap('incoming')">
+            <img src="left_lane.svg" alt="Incoming lane" class="map-img"/>
+            <span class="map-label map-label-incoming">الجهة القادمة</span>
+          </div>
+        </div>
+
+        <p class="map-hint" id="map-hint">اضغط على جانب لاختيار نقطة الاستلام</p>
+        <p class="map-hint" id="map-selected" style="display:none;">
+          تم اختيار <span id="map-selected-text">الجهة القادمة</span>
+        </p>
+
+        <button class="btn btn-primary" id="btn-confirm-side" style="display:none;" onclick="navigateTo('screen-confirm')">
+          &#8594; متابعة
+        </button>
+      </div>
+    </div>
+
+    <!-- SCREEN 5: Order Confirmation -->
+    <div id="screen-confirm" class="screen">
+      <div class="screen-content">
+        <button class="btn-back" onclick="navigateTo('screen-map')">&#8594; رجوع</button>
+        <h2 class="screen-title">مراجعة طلبك</h2>
+
+        <div class="confirm-card">
+          <div class="confirm-row">
+            <span class="confirm-label">العنصر</span>
+            <span id="confirm-item" class="confirm-value">قهوة (م)</span>
+          </div>
+          <div class="confirm-row">
+            <span class="confirm-label">الكمية</span>
+            <span id="confirm-qty" class="confirm-value">1</span>
+          </div>
+          <div class="confirm-divider"></div>
+          <div class="confirm-row">
+            <span class="confirm-label">جانب الاستلام</span>
+            <span id="confirm-side" class="confirm-value confirm-side">
+              <span id="confirm-side-arrow">&#8594;</span> الجهة القادمة
+            </span>
+          </div>
+          <div class="confirm-divider"></div>
+          <div class="confirm-row confirm-total">
+            <span class="confirm-label">الإجمالي</span>
+            <span id="confirm-total" class="confirm-value total-price">$4.00</span>
+          </div>
+        </div>
+
+        <p class="confirm-note">ادفع عند الوصول. جهّز طلبك!</p>
+
+        <button class="btn btn-primary btn-lg" onclick="placeOrder()">
+          تأكيد الطلب
+        </button>
+      </div>
+    </div>
+
+    <!-- SCREEN 6: Done -->
+    <div id="screen-done" class="screen">
+      <div class="screen-content welcome">
+        <div class="done-content">
+          <span class="done-check">&#10003;</span>
+          <h2>تم الطلب!</h2>
+          <p class="done-time">جاهز خلال ~٥ دقائق</p>
+          <div class="done-details">
+            <p id="done-side">الاستلام: الجهة القادمة &#8594;</p>
+            <p>ادفع عند الوصول</p>
+          </div>
+          <button class="btn btn-primary" onclick="resetOrder()">
+            طلب جديد
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Landscape warning -->
+  <div id="landscape-warning">
+    <div>
+      <span>&#128241;</span>
+      <p>يرجى تدوير هاتفك للوضع العمودي</p>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
